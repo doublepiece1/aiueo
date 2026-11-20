@@ -123,6 +123,11 @@ half4 PS(PSInput In) : SV_Target0
     [loop]
     for (i = 0; i < pointLightCount; ++i)
     {
+        // ポイントライトのディフューズ
+        L = normalize(pointLights[i].positionW - In.posW);
+        NdotL = dot(N, L);
+        atten = 1 - (length(pointLights[i].positionW - In.posW) * pointLights[i].rangeInv);
+        diffAccum += pointLights[i].color * saturate(atten) * saturate(NdotL);
     }
 
     // カラー合成
